@@ -101,8 +101,18 @@ def print_hangman(lives):
         case 6:
             print(live6)
 
-def repeat_game(choice):
-    if choice == 'y':
+
+def choise_play_again(lives):
+    message = "Do you want to play again? y/n: "
+    if lives == 0:
+        continue_playing = input("You lost! Do you want to play again? y/n: ").strip().lower()
+    else:
+        print("You guessed the word. You win!")
+        continue_playing = input(message).strip().lower()
+    while continue_playing not in ('y', 'n'):
+        print("Incorrect choice, write either 'y' or 'n'")
+        continue_playing = input(message).strip().lower()
+    if continue_playing == 'y':
         return True
     else:
         return False
@@ -115,8 +125,6 @@ with open(wordlist_path, 'r') as file:
     line_count = int(contents.count('\n'))
     contents = contents.split("\n")
     file.close()
-
-print(logo)
 
 while play:
     lower_cases = ""
@@ -132,6 +140,7 @@ while play:
     for i in range(word_len):
         lower_cases += '_'
 
+    print(logo)
     print(word)
 
     print(f"Word to guess: {lower_cases}")
@@ -176,12 +185,7 @@ while play:
                 print(f"You guessed '{guess_letter}' that's not in the word. You lose a life")                
                 print_hangman(lives)
                 if lives == 0:
-                    continue_playing = input("You lost! Do you want to play again? y/n: ").strip().lower()
-                    while continue_playing not in ('y', 'n'):
-                        print("Incorrect choice, write either 'y' or 'n': ")
-                        continue_playing = input("Do you want to play again? y/n: ").strip().lower()
-                        play = repeat_game(continue_playing)
-                    break
+                    play = choise_play_again(lives)
                 continue
             else:
                 index = 0
@@ -206,12 +210,9 @@ while play:
 
 
             if lower_cases == word:
-                print("You guessed the word. You win!")
-                continue_playing = input("Do you want to play again? y/n: ").strip().lower()
-                while continue_playing not in ('y', 'n'):
-                    print("Incorrect choice, write either 'y' or 'n'")
-                    continue_playing = input("Do you want to play again? y/n: ").strip().lower()
-                play = repeat_game(continue_playing)
+                play = choise_play_again(lives)
+                lives = 0
+                
 
     lives = 0
     lower_cases = ''
